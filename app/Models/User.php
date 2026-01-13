@@ -22,6 +22,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'full_name',
+        'address',
+        'city',
+        'country',
+        'phone_number',
     ];
 
     /**
@@ -44,11 +50,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
-
     /**
      * Send the password reset notification.
      *
@@ -58,5 +59,41 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Get the language classes taught by the professor.
+     */
+    public function taughtClasses()
+    {
+        return $this->hasMany(LanguageClass::class, 'professor_id');
+    }
+
+    /**
+     * Get the language classes the student is enrolled in.
+     */
+    public function enrolledClasses()
+    {
+        return $this->belongsToMany(
+            LanguageClass::class,
+            'language_class_assignments',
+            'student_id',
+            'language_class_id'
+        )->withPivot('status')->withTimestamps();
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isProfessor()
+    {
+        return $this->role === 'professor';
+    }
+
+    public function isStudent()
+    {
+        return $this->role === 'student';
     }
 }

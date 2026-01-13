@@ -12,8 +12,13 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'full_name' => $this->full_name,
             'email' => $this->email,
+            'address' => $this->address,
+            'role' => $this->role,
             'email_verified_at' => $this->email_verified_at,
+            'taught_classes' => $this->whenLoaded('taughtClasses'), // for professor
+            'enrolled_classes' => $this->whenLoaded('enrolledClasses'), // for student
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];

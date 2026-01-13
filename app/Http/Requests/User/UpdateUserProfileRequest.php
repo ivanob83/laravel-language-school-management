@@ -16,14 +16,17 @@ class UpdateUserProfileRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|required|string|max:255',
+            'full_name' => 'nullable|string|max:255',
             'email' => [
                 'sometimes',
                 'required',
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($this->user()->id),
+                Rule::unique('users')->ignore($this->route('user')),
             ],
+            'address' => 'nullable|string|max:500',
+            'role' => ['sometimes', Rule::in(['admin', 'professor', 'student'])],
         ];
     }
 }
