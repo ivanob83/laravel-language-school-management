@@ -1,172 +1,94 @@
-# Laravel Breeze REST API
+# Laravel REST API – Stateless School Management
 
-Stateless Laravel REST API using Breeze for authentication and user management.
-This API provides endpoints for user registration, login, logout, profile update, password change, and account deletion.
+## Overview
 
----
+This is a **Laravel REST API project** built with a **stateless authentication system**. The project is designed for **school/class management** and is fully **access-controlled**, meaning all endpoints require authentication. The API handles users, roles, classes, and attendance confirmation in a structured and secure way.
 
-## Features
+## Roles
 
--   User registration, login, logout (stateless, token-based)
--   User profile update and password change
--   Laravel Breeze starter kit for authentication scaffolding
--   Fully tested with Feature and Unit tests
--   API resources for consistent JSON responses
+The system defines three main roles:
 
----
+### Admin
 
-## Installation
+-   Full access to all resources.
+-   Can **create classes**, **assign students to classes**, and **set class schedules**.
+-   Manages users (view, create, update roles).
 
-1. Clone the repository:
+### Professor
 
-```bash
-git clone https://github.com/yourusername/laravel-breeze-rest-api.git
-cd laravel-breeze-rest-api
-```
+-   Can view their assigned classes.
+-   Confirms when a class has been **conducted**.
 
-2. Install dependencies:
+### Student
 
-```bash
-composer install
-```
+-   Can view classes they are enrolled in.
+-   Receives notifications for scheduled classes (optional future feature).
 
-3. Copy `.env` file:
+## Entities & Relationships
 
-```bash
-cp .env.example .env
-```
+### User
 
-4. Configure database in `.env`:
+-   **Attributes:** `id`, `name`, `email`, `password`, `role` (`admin | professor | student`)
+-   **Relationships:**
+    -   `hasMany(ClassAssignment)` (for professors: LanguageClasses they teach)
+    -   `belongsToMany(LanguageClass)` (for students: classes they attend)
 
-```env
-DB_CONNECTION=mysql
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
+### LanguageClass
 
-5. Run migrations:
+-   **Attributes:** `id`, `title`, `description`, `schedule_time`, `status` (`scheduled | completed`)
+-   **Relationships:**
+    -   `belongsToMany(User)` (students)
+    -   `belongsTo(User)` (professor)
 
-```bash
-php artisan migrate
-```
+### LanguageClassAssignment (pivot table for students)
 
----
+-   **Attributes:** `class_id`, `student_id`, `status` (`assigned | completed`)
 
-## Running the API
+## Workflow
 
-Start the development server:
+### Admin Flow
 
-```bash
-php artisan serve
-```
+1. Logs in.
+2. Creates a new LanguageClass with a title, description, and schedule.
+3. Assigns students to the class.
+4. Assigns a professor to the class.
 
-API base URL: `http://localhost:8000`
+### Professor Flow
 
----
+1. Logs in.
+2. Views classes assigned to them.
+3. Marks a class as **conducted** once finished.
 
-## API Endpoints
+### Student Flow
 
-| Method    | Endpoint           | Description                 | Request Body Example                                                                                             |
-| --------- | ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| POST      | /api/register      | Register new user           | `{ "name": "John", "email": "john@example.com", "password": "secret123", "password_confirmation": "secret123" }` |
-| POST      | /api/login         | Login and receive API token | `{ "email": "john@example.com", "password": "secret123" }`                                                       |
-| POST      | /api/logout        | Logout authenticated user   | _Authorization: Bearer {token}_                                                                                  |
-| GET       | /api/user          | Get authenticated user info | _Authorization: Bearer {token}_                                                                                  |
-| PUT/PATCH | /api/user          | Update user profile         | `{ "name": "New Name", "email": "newemail@example.com" }`                                                        |
-| PUT/PATCH | /api/user/password | Update user password        | `{ "current_password": "oldpass", "password": "newpass", "password_confirmation": "newpass" }`                   |
-| DELETE    | /api/user          | Delete user account         | `{ "password": "userpass" }`                                                                                     |
+1. Logs in.
+2. Views their upcoming or completed classes.
 
----
+## API Endpoints (Example)
 
-## Example Responses
+### Auth
 
-**Register / Login Success**
+-   `POST /login` – login
+-   `POST /register` – register user (admin only)
+-   `POST /logout` – logout
 
-```json
-{
-    "token": "1|abcd1234efgh5678ijkl",
-    "user": {
-        "id": 1,
-        "name": "John Doe",
-        "email": "john@example.com"
-    }
-}
-```
+### LanguageClasses
 
-**Get User**
+-   `GET /classes` – list all classes (role-based access)
+-   `POST /classes` – create a class (admin only)
+-   `PUT /classes/{id}` – update class (admin only)
+-   `POST /classes/{id}/confirm` – confirm class (professor only)
 
-```json
-{
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com"
-}
-```
+### Users
 
-**Update Profile Success**
+-   `GET /users` – list users (admin only)
+-   `POST /users` – create user (admin only)
+-   `PUT /users/{id}` – update user roles (admin only)
 
-```json
-{
-    "success": true,
-    "user": {
-        "id": 1,
-        "name": "New Name",
-        "email": "newemail@example.com"
-    }
-}
-```
+## Technical Highlights
 
-**Update Password / Delete Account Success**
-
-```json
-{
-    "success": true,
-    "message": "Password updated successfully" // or "Account deleted successfully"
-}
-```
-
-**Logout Success**
-
-Status: 204 No Content
-
----
-
-## Running Tests
-
-This project includes **Feature** and **Unit** tests.
-
-1. Make sure you have a test database set in `.env.testing`:
-
-```env
-DB_CONNECTION=mysql
-DB_DATABASE=laravel_test
-DB_USERNAME=root
-DB_PASSWORD=...
-```
-
-2. Run all tests:
-
-```bash
-php artisan test --env=testing
-```
-
-3. Run only Unit tests:
-
-```bash
-php artisan test --testsuite=Unit --env=testing
-```
-
-4. Run only Feature tests:
-
-```bash
-php artisan test --testsuite=Feature --env=testing
-```
-
-Laravel will automatically run migrations for the test database before each test.
-
----
-
-## License
-
-MIT License
+-   **Laravel 10** with **Sanctum / Passport** for stateless API authentication.
+-   **Role-based access control** via middleware.
+-   **JSON responses only**, ready for frontend integration (React, Vue, mobile apps).
+-   Fully **closed system**: all data access requires login.
+-   Designed for easy **scaling**, adding new features like notifications, attendance tracking, or reports.
