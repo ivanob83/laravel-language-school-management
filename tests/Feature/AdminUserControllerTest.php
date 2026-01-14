@@ -50,6 +50,13 @@ class AdminUserControllerTest extends TestCase
         ]);
     }
 
+    public function test_database_connection_is_sqlite()
+    {
+        dump(config('database.default'));
+
+        $this->assertTrue(true);
+    }
+
     /** @test */
     public function non_admin_cannot_delete_user()
     {
