@@ -52,8 +52,6 @@ class AdminUserControllerTest extends TestCase
 
     public function test_database_connection_is_sqlite()
     {
-        dump(config('database.default'));
-
         $this->assertTrue(true);
     }
 

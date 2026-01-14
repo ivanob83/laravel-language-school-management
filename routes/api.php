@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\LanguageClassAssignmentController;
 use App\Http\Controllers\LanguageClassController;
+use App\Http\Controllers\LanguageClassStatisticsController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
@@ -78,5 +79,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/language-class-assignments', [LanguageClassAssignmentController::class, 'store']);
         Route::put('/language-class-assignments/{id}', [LanguageClassAssignmentController::class, 'update']);
         Route::delete('/language-class-assignments/{id}', [LanguageClassAssignmentController::class, 'destroy']);
+    });
+});
+
+// Statistics routes
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::prefix('statistics')->group(function () {
+        Route::get('professors', [LanguageClassStatisticsController::class, 'professors']);
+        Route::get('students', [LanguageClassStatisticsController::class, 'students']);
+        Route::get('daily-classes', [LanguageClassStatisticsController::class, 'dailyClasses']);
     });
 });
