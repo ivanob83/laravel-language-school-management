@@ -21,7 +21,6 @@ class AdminUserController extends Controller
                 'message' => 'You cannot delete your own account.',
             ], 403);
         }
-
         $user->tokens()->delete(); // revoke tokens
         $user->delete();
 
