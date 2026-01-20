@@ -1,0 +1,11 @@
+parameters:
+    level: 6
+    paths:
+        - app
+        - database
+        - routes
+    ignoreErrors:
+        - '#Call to an undefined method#'
+        - '#Access to an undefined property#'
+        - '#Dynamic call to static method#'
+    reportUnmatchedIgnoredErrors: false
