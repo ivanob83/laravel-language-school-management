@@ -58,7 +58,7 @@ class LanguageClassStatisticsServiceTest extends TestCase
         LanguageClass::factory()->create(['schedule_time' => now()]);
         LanguageClass::factory()->create(['schedule_time' => now()->subDay()]);
 
-        $stats = $this->service->classesByPeriod('daily');
+        $stats = $this->service->classesByPeriod([], 'daily');
 
         $this->assertCount(2, $stats);
         $this->assertEquals(2, $stats->firstWhere('period', now()->format('Y-m-d'))['total']);

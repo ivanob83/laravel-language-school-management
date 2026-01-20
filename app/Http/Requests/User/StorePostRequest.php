@@ -29,7 +29,7 @@ class StorePostRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages() : array
     {
         return [
             'title' => 'Title is required'

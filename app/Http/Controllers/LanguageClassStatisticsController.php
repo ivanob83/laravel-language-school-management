@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\LanguageClassStatisticsService;
+use App\Services\Statistics\LanguageClassStatisticsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

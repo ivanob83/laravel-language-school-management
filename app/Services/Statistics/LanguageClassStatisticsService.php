@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Statistics;
 
 use App\Models\LanguageClass;
 use App\Models\User;
