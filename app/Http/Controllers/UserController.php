@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\UpdatePasswordRequest;
-use App\Http\Requests\User\UpdateUserProfileRequest;
+use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +27,7 @@ class UserController extends Controller
     /**
      * Update the authenticated user's profile.
      */
-    public function update(UpdateUserProfileRequest $request): UserResource
+    public function update(UpdateProfileRequest $request): UserResource
     {
         $user = $this->userService->updateProfile(
             $request->user(),

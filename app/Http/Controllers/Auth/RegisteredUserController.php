@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserField;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
@@ -20,8 +21,8 @@ class RegisteredUserController extends Controller
     {
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            UserField::Name->value => $request->name,
+            UserField::Email->value => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
