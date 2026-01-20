@@ -7,6 +7,7 @@ use App\Http\Requests\User\UpdatePasswordRequest;
 use App\Http\Requests\User\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
+use App\DTOs\UserDTO;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -28,10 +29,10 @@ class UserController extends Controller
      * Update the authenticated user's profile.
      */
     public function update(UpdateProfileRequest $request): UserResource
-    {
+    {   
         $user = $this->userService->updateProfile(
             $request->user(),
-            $request->validated()
+            UserDTO::fromArray($request->validated())->toDbArray()
         );
 
         return new UserResource($user);

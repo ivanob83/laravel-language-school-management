@@ -5,6 +5,7 @@ namespace App\Http\Requests\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Enums\UserField;
+use App\Enums\UserRole;
 
 class UpdateProfileRequest extends FormRequest
 {
@@ -30,7 +31,7 @@ class UpdateProfileRequest extends FormRequest
             UserField::City->value => 'nullable|string|max:100',
             UserField::Country->value => 'nullable|string|max:100',
             UserField::PhoneNumber->value => 'nullable|string|max:20',
-            UserField::Role->value => ['sometimes', Rule::in(['admin', 'professor', 'student'])],
+            UserField::Role->value => ['sometimes', Rule::in(array_column(UserRole::cases(), 'value'))],
         ];
     }
 }

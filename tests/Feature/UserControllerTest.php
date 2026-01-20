@@ -40,6 +40,7 @@ class UserControllerTest extends TestCase
             'full_name' => 'Old Full Name',
             'email' => 'oldemail@example.com',
             'address' => 'Old Address',
+            'role' => 'student',
         ]);
         $this->actingAs($user, 'sanctum');
 
@@ -48,6 +49,7 @@ class UserControllerTest extends TestCase
             'full_name' => 'New Full Name',
             'email' => 'newemail@example.com',
             'address' => 'New Address',
+            'role' => 'student',
         ];
 
         $response = $this->putJson('/api/user', $payload);

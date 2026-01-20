@@ -2,6 +2,9 @@
 
 namespace App\Enums;
 
+/**
+ * Enum representing user fields in requests which in feature can be changed and will be mapped dynamically.
+ */
 enum UserField: string
 {
     case Name = 'name';
