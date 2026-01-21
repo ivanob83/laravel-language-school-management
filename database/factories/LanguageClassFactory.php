@@ -31,7 +31,7 @@ class LanguageClassFactory extends Factory
     }
 
     // Optional state helpers
-    public function scheduled()
+    public function scheduled() : static
     {
         return $this->state(fn() => ['status' => 'scheduled']);
     }
@@ -39,7 +39,7 @@ class LanguageClassFactory extends Factory
     /**
      * Factory state for completed classes
      */
-    public function completed()
+    public function completed() : static
     {
         return $this->state(fn() => ['status' => 'completed']);
     }

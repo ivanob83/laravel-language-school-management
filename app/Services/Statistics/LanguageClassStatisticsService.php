@@ -11,8 +11,13 @@ class LanguageClassStatisticsService
 {
     /**
      * Dashboard overview
+     * * @return array{
+     *     total_classes: int,
+     *     total_professors: int,
+     *     total_students: int
+     * }
      */
-    public function overview(?string $from = null, ?string $to = null): array
+    public function overview(?string $from = null, ?string $to = null) : array
     {
         $query = LanguageClass::query()
             ->when($from, fn($q) => $q->whereDate('schedule_time', '>=', $from))
@@ -40,25 +45,25 @@ class LanguageClassStatisticsService
         $query = LanguageClass::query();
 
         // Filter po status časova
-        if (!empty($filters['status'])) {
+        if (($filters['status'] ?? null) !== null) {
             $query->where('status', $filters['status']);
         }
 
         // Filter po profesoru
-        if (!empty($filters['professor_id'])) {
+        if (($filters['professor_id'] ?? null) !== null) {
             $query->where('professor_id', $filters['professor_id']);
         }
 
         // Filter po studentu (pivot tabela)
-        if (!empty($filters['student_id'])) {
+        if (($filters['student_id'] ?? null) !== null) {
             $query->whereHas('students', fn($q) => $q->where('user_id', $filters['student_id']));
         }
 
         // Filter po periodu (from/to)
-        if (!empty($filters['from'])) {
+        if (($filters['from'] ?? null) !== null) {
             $query->where('schedule_time', '>=', Carbon::parse($filters['from']));
         }
-        if (!empty($filters['to'])) {
+        if (($filters['to'] ?? null) !== null) {
             $query->where('schedule_time', '<=', Carbon::parse($filters['to']));
         }
 
@@ -85,7 +90,7 @@ class LanguageClassStatisticsService
     {
         $query = User::query()->where('role', 'professor');
 
-        if (!empty($filters['professor_id'])) {
+        if (($filters['professor_id'] ?? null) !== null) {
             $query->where('id', $filters['professor_id']);
         }
 
@@ -94,15 +99,15 @@ class LanguageClassStatisticsService
         return $professors->map(function ($professor) use ($filters) {
             $classes = $professor->taughtClasses;
 
-            if (!empty($filters['status'])) {
+            if (($filters['status'] ?? null) !== null) {
                 $classes = $classes->where('status', $filters['status']);
             }
 
-            if (!empty($filters['from'])) {
+            if (($filters['from'] ?? null) !== null) {
                 $from = Carbon::parse($filters['from']);
                 $classes = $classes->filter(fn($c) => Carbon::parse($c->schedule_time) >= $from);
             }
-            if (!empty($filters['to'])) {
+            if (($filters['to'] ?? null) !== null) {
                 $to = Carbon::parse($filters['to']);
                 $classes = $classes->filter(fn($c) => Carbon::parse($c->schedule_time) <= $to);
             }
@@ -120,7 +125,7 @@ class LanguageClassStatisticsService
     {
         $query = User::query()->where('role', 'student');
 
-        if (!empty($filters['student_id'])) {
+        if (($filters['student_id'] ?? null) !== null) {
             $query->where('id', $filters['student_id']);
         }
 
@@ -129,15 +134,15 @@ class LanguageClassStatisticsService
         return $students->map(function ($student) use ($filters) {
             $classes = $student->enrolledClasses;
 
-            if (!empty($filters['status'])) {
+            if (($filters['status'] ?? null) !== null) {
                 $classes = $classes->where('status', $filters['status']);
             }
 
-            if (!empty($filters['from'])) {
+            if (($filters['from'] ?? null) !== null) {
                 $from = Carbon::parse($filters['from']);
                 $classes = $classes->filter(fn($c) => Carbon::parse($c->schedule_time) >= $from);
             }
-            if (!empty($filters['to'])) {
+            if (($filters['to'] ?? null) !== null) {
                 $to = Carbon::parse($filters['to']);
                 $classes = $classes->filter(fn($c) => Carbon::parse($c->schedule_time) <= $to);
             }

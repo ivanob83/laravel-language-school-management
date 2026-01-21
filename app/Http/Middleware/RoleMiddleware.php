@@ -17,11 +17,11 @@ class RoleMiddleware
     {
         $user = $request->user();
 
-        if (!$user) {
+        if ($user === null) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if (!in_array($user->role, $roles)) {
+        if (!in_array($user->role, $roles, true)) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

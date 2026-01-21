@@ -3,14 +3,15 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\DTOs\UserDTO;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserService
 {
-    public function updateProfile(User $user, array $data): User
+    public function updateProfile(User $user, UserDTO $data): User
     {
-        $user->update($data);
+        $user->update($data->toDbArray());
         return $user;
     }
 

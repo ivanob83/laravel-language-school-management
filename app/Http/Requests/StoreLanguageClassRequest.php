@@ -10,7 +10,7 @@ class StoreLanguageClassRequest extends FormRequest
     public function authorize(): bool
     {
         // Only admin can create
-        return auth()->user() && auth()->user()->role === 'admin';
+        return auth()->user() !== null && auth()->user()->role === 'admin';
     }
 
     public function rules(): array

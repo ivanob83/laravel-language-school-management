@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\DTOs;
 
 use App\Enums\UserField;
-use App\Traits\HasMappedFields;
 use Illuminate\Http\Request;
 
 final readonly class UserDTO
 {
-    use HasMappedFields;
 
     public function __construct(
         public string $name,

@@ -32,7 +32,7 @@ class UserController extends Controller
     {   
         $user = $this->userService->updateProfile(
             $request->user(),
-            UserDTO::fromArray($request->validated())->toDbArray()
+            UserDTO::fromArray($request->validated())
         );
 
         return new UserResource($user);

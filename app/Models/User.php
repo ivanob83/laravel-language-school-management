@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,18 +67,18 @@ class User extends Authenticatable
 
     /**
      * Get the language classes taught by the professor.
-     * @return HasMany<LanguageClass, self>
+     * @return HasMany
      */
-    public function taughtClasses() : \Illuminate\Database\Eloquent\Relations\HasMany
+    public function taughtClasses() : HasMany
     {
         return $this->hasMany(LanguageClass::class, 'professor_id');
     }
 
     /**
      * Get the language classes the student is enrolled in.
-     * @return BelongsToMany<LanguageClass, self>
+     * @return BelongsToMany
      */
-    public function enrolledClasses() : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function enrolledClasses() : BelongsToMany
     {
         return $this->belongsToMany(
             LanguageClass::class,
